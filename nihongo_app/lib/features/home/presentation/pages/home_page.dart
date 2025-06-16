@@ -3,6 +3,7 @@ import '../widgets/level_card.dart';
 import '../widgets/course_card.dart';
 import '../widgets/progress_card.dart';
 import '../../../settings/presentation/pages/settings_page.dart';
+import '../../../profile/presentation/pages/profile_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -56,10 +57,10 @@ class _HomePageState extends State<HomePage> {
             ),
             const Spacer(),
             IconButton(
-              icon: const Icon(Icons.settings_rounded, color: Colors.black, size: 28),
+              icon: const Icon(Icons.account_circle_rounded, color: Colors.black, size: 28),
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const SettingsPage()),
+                  MaterialPageRoute(builder: (context) => const ProfilePage()),
                 );
               },
             ),
@@ -77,31 +78,43 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             const SizedBox(height: 12),
-            Row(
-              children: const [
-                LevelCard(
-                  title: 'N5',
-                  subtitle: 'Sơ cấp',
-                  percent: 0.65,
-                  color: Color(0xFF4A90E2),
-                ),
-                SizedBox(width: 16),
-                LevelCard(
-                  title: 'N4',
-                  subtitle: 'Cơ bản',
-                  percent: 0.4,
-                  color: Color(0xFF3ED598),
-                ),
-                SizedBox(width: 8),
-                // Thanh màu vàng
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFFC542),
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
+            SizedBox(
+              height: 120,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: const [
+                  LevelCard(
+                    title: 'N5',
+                    subtitle: 'Sơ cấp',
+                    percent: 0.65,
+                    color: Color(0xFF4A90E2),
                   ),
-                  child: SizedBox(width: 6, height: 80),
-                ),
-              ],
+                  LevelCard(
+                    title: 'N4',
+                    subtitle: 'Cơ bản',
+                    percent: 0.4,
+                    color: Color(0xFF3ED598),
+                  ),
+                  LevelCard(
+                    title: 'N3',
+                    subtitle: 'Trung cấp',
+                    percent: 0.2,
+                    color: Color(0xFFFFC542),
+                  ),
+                  LevelCard(
+                    title: 'N2',
+                    subtitle: 'Cao trung',
+                    percent: 0.1,
+                    color: Color(0xFFB620E0),
+                  ),
+                  LevelCard(
+                    title: 'N1',
+                    subtitle: 'Cao cấp',
+                    percent: 0.0,
+                    color: Color(0xFFEB5757),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 28),
             const Text(
