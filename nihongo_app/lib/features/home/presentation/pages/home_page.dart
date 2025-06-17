@@ -4,6 +4,7 @@ import '../widgets/course_card.dart';
 import '../widgets/progress_card.dart';
 import '../../../settings/presentation/pages/settings_page.dart';
 import '../../../profile/presentation/pages/profile_page.dart';
+import '../../../progress/presentation/pages/progress_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,6 +20,10 @@ class _HomePageState extends State<HomePage> {
     if (index == 3) {
       Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => const SettingsPage()),
+      );
+    } else if (index == 2) {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const ProgressPage()),
       );
     } else {
       setState(() {
