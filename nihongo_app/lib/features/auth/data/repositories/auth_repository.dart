@@ -1,14 +1,17 @@
+import 'package:dartz/dartz.dart';
 import 'package:nihongo_app/core/network/api_client.dart';
 import 'package:nihongo_app/core/network/api_endpoints.dart';
+import 'package:nihongo_app/core/error/failures.dart';
 import 'package:nihongo_app/features/auth/data/models/auth_request.dart';
 import 'package:nihongo_app/features/auth/data/models/auth_response.dart';
-import 'package:nihongo_app/shared/models/user.dart';
+import 'package:nihongo_app/features/auth/domain/entities/user.dart';
+import 'package:nihongo_app/features/auth/domain/repositories/auth_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthRepository {
+class AuthRepositoryImpl implements AuthRepository {
   final ApiClient _apiClient;
   
-  AuthRepository(this._apiClient);
+  AuthRepositoryImpl(this._apiClient);
   
   Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
@@ -27,29 +30,79 @@ class AuthRepository {
 
   Future<void> saveUser(User user) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('user', user.toJson().toString());
+    // Convert User entity to map for storage
+    final userData = {
+      'id': user.id,
+      'name': user.name,
+      'email': user.email,
+    };
+    await prefs.setString('user', userData.toString());
   }
   
-  Future<User> register(RegisterRequest request) async {
-    final response = await _apiClient.post(
-      ApiEndpoints.register,
-      data: request.toJson(),
-    );
-    
-    final authResponse = AuthResponse.fromJson(response);
-    await saveToken(authResponse.token);
-    return authResponse.user;
+  @override
+  Future<Either<Failure, User>> register({
+    String? name,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final request = RegisterRequest(
+        name: name,
+        email: email,
+        password: password,
+      );
+      
+      final response = await _apiClient.post(
+        ApiEndpoints.register,
+        data: request.toJson(),
+      );
+      
+      final authResponse = AuthResponse.fromJson(response);
+      await saveToken(authResponse.token);
+      
+      // Convert data model to domain entity
+      final user = User(
+        id: authResponse.user.id,
+        name: authResponse.user.name,
+        email: authResponse.user.email,
+      );
+      
+      return Right(user);
+    } catch (e) {
+      return Left(ServerFailure('Registration failed: ${e.toString()}'));
+    }
   }
   
-  Future<User> login(LoginRequest request) async {
-    final response = await _apiClient.post(
-      ApiEndpoints.login,
-      data: request.toJson(),
-    );
-    
-    final authResponse = AuthResponse.fromJson(response);
-    await saveToken(authResponse.token);
-    return authResponse.user;
+  @override
+  Future<Either<Failure, User>> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final request = LoginRequest(
+        email: email,
+        password: password,
+      );
+      
+      final response = await _apiClient.post(
+        ApiEndpoints.login,
+        data: request.toJson(),
+      );
+      
+      final authResponse = AuthResponse.fromJson(response);
+      await saveToken(authResponse.token);
+      
+      // Convert data model to domain entity
+      final user = User(
+        id: authResponse.user.id,
+        name: authResponse.user.name,
+        email: authResponse.user.email,
+      );
+      
+      return Right(user);
+    } catch (e) {
+      return Left(ServerFailure('Login failed: ${e.toString()}'));
+    }
   }
   
   Future<void> logout() async {
