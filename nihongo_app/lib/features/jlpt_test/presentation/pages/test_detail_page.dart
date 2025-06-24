@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../shared/widgets/app_bottom_navigation_bar.dart';
 import '../widgets/test_card.dart';
 import '../widgets/recent_result_card.dart';
+import 'lesson_list_page.dart';
 
 class TestDetailPage extends StatefulWidget {
   final String level;
@@ -24,6 +25,18 @@ class _TestDetailPageState extends State<TestDetailPage> {
     setState(() {
       _currentIndex = index;
     });
+  }
+
+  void _navigateToLessonList(String section) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LessonListPage(
+          level: widget.level,
+          section: section,
+        ),
+      ),
+    );
   }
 
   void _onTestStart() {
@@ -76,7 +89,7 @@ class _TestDetailPageState extends State<TestDetailPage> {
                 level: widget.level,
                 duration: '20 phút',
                 questions: '20 câu trắc nghiệm',
-                onActionPressed: _onTestStart,
+                onActionPressed: () => _navigateToLessonList('Ngữ pháp'),
               ),
               TestCard(
                 icon: Icons.menu_book,
@@ -85,7 +98,7 @@ class _TestDetailPageState extends State<TestDetailPage> {
                 duration: '15 phút',
                 questions: '15 câu trắc nghiệm',
                 isInProgress: true,
-                onActionPressed: _onTestContinue,
+                onActionPressed: () => _navigateToLessonList('Từ vựng'),
               ),
               TestCard(
                 icon: Icons.headphones,
@@ -93,7 +106,7 @@ class _TestDetailPageState extends State<TestDetailPage> {
                 level: widget.level,
                 duration: '10 phút',
                 questions: '10 câu hỏi',
-                onActionPressed: _onTestStart,
+                onActionPressed: () => _navigateToLessonList('Nghe hiểu'),
               ),
               const SizedBox(height: 16),
               const Text(
