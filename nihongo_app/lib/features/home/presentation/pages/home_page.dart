@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import '../widgets/level_card.dart';
 import '../widgets/course_card.dart';
 import '../widgets/progress_card.dart';
-import '../../../settings/presentation/pages/settings_page.dart';
 import '../../../profile/presentation/pages/profile_page.dart';
-import '../../../progress/presentation/pages/progress_page.dart';
+import '../../../../shared/widgets/app_bottom_navigation_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,19 +16,9 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
   void _onBottomNavTap(int index) {
-    if (index == 3) {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const SettingsPage()),
-      );
-    } else if (index == 2) {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const ProgressPage()),
-      );
-    } else {
-      setState(() {
-        _currentIndex = index;
-      });
-    }
+    setState(() {
+      _currentIndex = index;
+    });
   }
 
   @override
@@ -133,26 +122,26 @@ class _HomePageState extends State<HomePage> {
               duration: '2 giờ 30 phút',
               lessons: 12,
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             const CourseCard(
               image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836',
               title: 'Từ vựng chủ đề ẩm thực',
               duration: '1 giờ 45 phút',
               lessons: 8,
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             const CourseCard(
               image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca',
               title: 'Luyện nghe JLPT N5',
               duration: '3 giờ',
               lessons: 15,
             ),
-            SizedBox(height: 28),
+            const SizedBox(height: 28),
             const Text(
               'Tiến độ học tập',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
@@ -161,33 +150,11 @@ class _HomePageState extends State<HomePage> {
                 ProgressCard(title: 'Điểm tích lũy', value: '280'),
               ],
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: const Color(0xFF4A90E2),
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu_book_rounded),
-            label: 'Học tập',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.quiz_rounded),
-            label: 'Kiểm tra',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart_rounded),
-            label: 'Tiến độ',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings_rounded),
-            label: 'Cài đặt',
-          ),
-        ],
+      bottomNavigationBar: AppBottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: _onBottomNavTap,
       ),

@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 
 // Core
 import '../network/network_service.dart';
+import '../services/auth_service.dart';
 
 // Features
 import '../../features/auth/data/datasources/auth_remote_data_source.dart';
@@ -15,6 +16,9 @@ import '../../features/auth/presentation/bloc/auth_bloc.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  // Initialize AuthService
+  await AuthService.init();
+
   //! Features - Auth
   // Bloc
   sl.registerFactory(() => AuthBloc(

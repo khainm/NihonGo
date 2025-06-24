@@ -1,11 +1,13 @@
 class ApiEndpoints {
+  static const String baseUrl = 'http://localhost:8080/api';
+  
   // Auth endpoints
   static const String login = '/auth/login';
   static const String register = '/auth/register';
   static const String refreshToken = '/auth/refresh-token';
   
   // User endpoints
-  static const String profile = '/user/profile';
+  static const String userProfile = '/user/profile';
   static const String updateProfile = '/user/profile';
   
   // Course endpoints
@@ -21,4 +23,9 @@ class ApiEndpoints {
   // Progress endpoints
   static const String userProgress = '/user/progress';
   static const String dailyGoals = '/user/goals';
+  
+  // JLPT endpoints
+  static const String jlptLevels = '/jlpt/levels';
+  static const String jlptTests = '/jlpt/tests';
+  static const String jlptHistory = '/jlpt/history';
 }

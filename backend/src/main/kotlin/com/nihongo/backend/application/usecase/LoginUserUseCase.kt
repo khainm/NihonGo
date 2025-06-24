@@ -2,15 +2,14 @@ package com.nihongo.backend.application.usecase
 
 import com.nihongo.backend.domain.model.User
 import com.nihongo.backend.domain.repository.UserRepository
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class LoginUserUseCase(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val passwordEncoder: PasswordEncoder
 ) {
-    private val passwordEncoder = BCryptPasswordEncoder()
-
     fun execute(email: String, password: String): User {
         // Find user by email
         val user = userRepository.findByEmail(email)

@@ -1,124 +1,66 @@
-import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:nihongo_app/core/mocks/mock_api_interceptor.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import '../services/auth_service.dart';
+import 'api_endpoints.dart';
 
 class ApiClient {
-  late Dio _dio;
-  final bool useMock;
-  
-  ApiClient({this.useMock = true}) {
-    _dio = Dio(
-      BaseOptions(
-        baseUrl: dotenv.env['API_BASE_URL'] ?? 'https://api.nihongo-app.example.com/v1',
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-      ),
+  final http.Client _client;
+
+  ApiClient({http.Client? client}) : _client = client ?? http.Client();
+
+  Future<Map<String, dynamic>> get(String endpoint) async {
+    final response = await _client.get(
+      Uri.parse(ApiEndpoints.baseUrl + endpoint),
+      headers: await _getHeaders(),
     );
-    
-    // Add logger in development
-    _dio.interceptors.add(PrettyDioLogger(
-      requestHeader: true,
-      requestBody: true,
-      responseBody: true,
-      responseHeader: false,
-      error: true,
-      compact: true,
-    ));
-    
-    // Add mock interceptor for development
-    if (useMock) {
-      _dio.interceptors.add(MockApiInterceptor());
-    }
+    return _handleResponse(response);
   }
-  
-  // GET request
-  Future<dynamic> get(
-    String path, {
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
-    try {
-      final Response response = await _dio.get(
-        path,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-      );
-      return response.data;
-    } catch (e) {
-      rethrow;
-    }
+
+  Future<Map<String, dynamic>> post(String endpoint, dynamic data) async {
+    final response = await _client.post(
+      Uri.parse(ApiEndpoints.baseUrl + endpoint),
+      headers: await _getHeaders(),
+      body: json.encode(data),
+    );
+    return _handleResponse(response);
   }
-  
-  // POST request
-  Future<dynamic> post(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
-    try {
-      final Response response = await _dio.post(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-      );
-      return response.data;
-    } catch (e) {
-      rethrow;
-    }
+
+  Future<Map<String, dynamic>> put(String endpoint, dynamic data) async {
+    final response = await _client.put(
+      Uri.parse(ApiEndpoints.baseUrl + endpoint),
+      headers: await _getHeaders(),
+      body: json.encode(data),
+    );
+    return _handleResponse(response);
   }
-  
-  // PUT request
-  Future<dynamic> put(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
-    try {
-      final Response response = await _dio.put(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-      );
-      return response.data;
-    } catch (e) {
-      rethrow;
-    }
+
+  Future<Map<String, dynamic>> delete(String endpoint) async {
+    final response = await _client.delete(
+      Uri.parse(ApiEndpoints.baseUrl + endpoint),
+      headers: await _getHeaders(),
+    );
+    return _handleResponse(response);
   }
-  
-  // DELETE request
-  Future<dynamic> delete(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
-    try {
-      final Response response = await _dio.delete(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-      );
-      return response.data;
-    } catch (e) {
-      rethrow;
+
+  Future<Map<String, String>> _getHeaders() async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+
+    final token = AuthService.getToken();
+    if (token != null) {
+      headers['Authorization'] = 'Bearer $token';
+    }
+
+    return headers;
+  }
+
+  Map<String, dynamic> _handleResponse(http.Response response) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('API Error: ${response.statusCode} - ${response.body}');
     }
   }
 }

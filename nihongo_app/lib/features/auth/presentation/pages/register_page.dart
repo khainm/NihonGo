@@ -42,7 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
       create: (context) => di.sl<AuthBloc>(),
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is AuthSuccess) {
+          if (state is AuthAuthenticated) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text(AppStrings.registerSuccess),

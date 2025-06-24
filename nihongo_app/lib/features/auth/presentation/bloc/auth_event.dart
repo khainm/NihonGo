@@ -34,3 +34,11 @@ class LoginUserEvent extends AuthEvent {
   @override
   List<Object> get props => [email, password];
 }
+
+class CheckAuthenticationEvent extends AuthEvent {
+  const CheckAuthenticationEvent();
+}
+
+class LogoutEvent extends AuthEvent {
+  const LogoutEvent();
+}

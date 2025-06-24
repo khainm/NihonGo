@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
       create: (context) => di.sl<AuthBloc>(),
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is AuthSuccess) {
+          if (state is AuthAuthenticated) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text(AppStrings.loginSuccess),

@@ -6,38 +6,12 @@ import 'package:nihongo_app/features/auth/data/models/auth_request.dart';
 import 'package:nihongo_app/features/auth/data/models/auth_response.dart';
 import 'package:nihongo_app/features/auth/domain/entities/user.dart';
 import 'package:nihongo_app/features/auth/domain/repositories/auth_repository.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:nihongo_app/core/services/auth_service.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final ApiClient _apiClient;
   
   AuthRepositoryImpl(this._apiClient);
-  
-  Future<String?> getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('auth_token');
-  }
-  
-  Future<void> saveToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('auth_token', token);
-  }
-  
-  Future<void> clearToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('auth_token');
-  }
-
-  Future<void> saveUser(User user) async {
-    final prefs = await SharedPreferences.getInstance();
-    // Convert User entity to map for storage
-    final userData = {
-      'id': user.id,
-      'name': user.name,
-      'email': user.email,
-    };
-    await prefs.setString('user', userData.toString());
-  }
   
   @override
   Future<Either<Failure, User>> register({
@@ -54,11 +28,17 @@ class AuthRepositoryImpl implements AuthRepository {
       
       final response = await _apiClient.post(
         ApiEndpoints.register,
-        data: request.toJson(),
+        request.toJson(),
       );
       
       final authResponse = AuthResponse.fromJson(response);
-      await saveToken(authResponse.token);
+      
+      // Save auth data using AuthService
+      await AuthService.saveAuthData(
+        token: authResponse.token,
+        email: authResponse.user.email,
+        name: authResponse.user.name,
+      );
       
       // Convert data model to domain entity
       final user = User(
@@ -86,11 +66,17 @@ class AuthRepositoryImpl implements AuthRepository {
       
       final response = await _apiClient.post(
         ApiEndpoints.login,
-        data: request.toJson(),
+        request.toJson(),
       );
       
       final authResponse = AuthResponse.fromJson(response);
-      await saveToken(authResponse.token);
+      
+      // Save auth data using AuthService
+      await AuthService.saveAuthData(
+        token: authResponse.token,
+        email: authResponse.user.email,
+        name: authResponse.user.name,
+      );
       
       // Convert data model to domain entity
       final user = User(
@@ -105,12 +91,13 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
   
+  @override
   Future<void> logout() async {
-    await clearToken();
+    await AuthService.clearAuthData();
   }
   
+  @override
   Future<bool> isLoggedIn() async {
-    final token = await getToken();
-    return token != null;
+    return AuthService.isAuthenticated();
   }
 }

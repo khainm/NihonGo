@@ -2,33 +2,25 @@ package com.nihongo.backend.application.usecase
 
 import com.nihongo.backend.domain.model.User
 import com.nihongo.backend.domain.repository.UserRepository
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class RegisterUserUseCase(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val passwordEncoder: PasswordEncoder
 ) {
-    private val passwordEncoder = BCryptPasswordEncoder()
-
     fun execute(name: String?, email: String, password: String): User {
-        // Validate business rules
-        if (userRepository.findByEmail(email) != null) {
+        // Check if email already exists
+        userRepository.findByEmail(email)?.let {
             throw IllegalArgumentException("Email already exists")
         }
         
-        if (password.length < 8) {
-            throw IllegalArgumentException("Password must be at least 8 characters")
-        }
-        
-        // Hash password
-        val hashedPassword = passwordEncoder.encode(password)
-        
-        // Create and save user
+        // Create new user with hashed password
         val user = User(
             name = name,
             email = email,
-            password = hashedPassword
+            password = passwordEncoder.encode(password)
         )
         
         return userRepository.save(user)

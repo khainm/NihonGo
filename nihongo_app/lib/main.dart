@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'core/config/dependency_injection.dart';
 import 'features/home/presentation/pages/home_page.dart';
 import 'features/auth/presentation/pages/register_page.dart';
 import 'features/auth/presentation/pages/login_page.dart';
+import 'features/auth/presentation/pages/splash_screen.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/theme/app_theme.dart';
 import 'core/constants/app_constants.dart';
@@ -36,9 +34,9 @@ class MyApp extends StatelessWidget {
           bodyMedium: TextStyle(color: AppTheme.textColor),
         ),
       ),
-      initialRoute: '/register',
+      initialRoute: '/',
       routes: {
-        '/': (context) => const HomePage(),
+        '/': (context) => const SplashScreen(),
         '/home': (context) => const HomePage(),
         '/register': (context) => const RegisterPage(),
         '/login': (context) => const LoginPage(),

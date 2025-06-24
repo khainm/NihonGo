@@ -4,9 +4,45 @@ import '../widgets/profile_quick_stat.dart';
 import '../widgets/profile_goal_progress.dart';
 import '../widgets/profile_badge.dart';
 import '../widgets/profile_action_button.dart';
+import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../../auth/presentation/bloc/auth_event.dart';
+import '../../../../core/di/injection_container.dart' as di;
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
+
+  void _handleLogout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Đăng xuất'),
+          content: const Text('Bạn có chắc chắn muốn đăng xuất không?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Hủy'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Tạo AuthBloc và trigger logout event
+                final authBloc = di.sl<AuthBloc>();
+                authBloc.add(const LogoutEvent());
+                
+                // Navigate to login page và clear all previous routes
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/login',
+                  (route) => false,
+                );
+              },
+              child: const Text('Đăng xuất', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +129,12 @@ class ProfilePage extends StatelessWidget {
               ProfileActionButton(icon: Icons.bar_chart_rounded, label: 'Đặt lại mục tiêu', onTap: () {}),
               ProfileActionButton(icon: Icons.access_time_rounded, label: 'Thay đổi cấp độ JLPT', onTap: () {}),
               ProfileActionButton(icon: Icons.shield_rounded, label: 'Cài đặt bảo mật', onTap: () {}),
-              ProfileActionButton(icon: Icons.logout_rounded, label: 'Đăng xuất', onTap: () {}, color: Colors.red),
+              ProfileActionButton(
+                icon: Icons.logout_rounded, 
+                label: 'Đăng xuất', 
+                onTap: () => _handleLogout(context), 
+                color: Colors.red
+              ),
             ],
           ),
           const SizedBox(height: 24),
