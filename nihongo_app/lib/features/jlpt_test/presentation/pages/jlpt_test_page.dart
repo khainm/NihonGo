@@ -3,6 +3,7 @@ import '../widgets/jlpt_level_card.dart';
 import '../widgets/test_section_card.dart';
 import '../widgets/recent_test_card.dart';
 import '../../../../shared/widgets/app_bottom_navigation_bar.dart';
+import 'test_detail_page.dart';
 
 class JLPTTestPage extends StatefulWidget {
   const JLPTTestPage({super.key});
@@ -13,11 +14,30 @@ class JLPTTestPage extends StatefulWidget {
 
 class _JLPTTestPageState extends State<JLPTTestPage> {
   int _currentIndex = 1; // Set to 1 for the Test tab
+  String _selectedLevel = 'N5';
 
   void _onBottomNavTap(int index) {
     setState(() {
       _currentIndex = index;
     });
+  }
+
+  void _onLevelSelect(String level) {
+    setState(() {
+      _selectedLevel = level;
+    });
+  }
+
+  void _navigateToTestDetail(String section) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TestDetailPage(
+          level: _selectedLevel,
+          section: section,
+        ),
+      ),
+    );
   }
 
   @override
@@ -54,7 +74,8 @@ class _JLPTTestPageState extends State<JLPTTestPage> {
                       title: 'Sơ Cấp',
                       progress: 0.65,
                       color: Colors.blue,
-                      onTap: () {},
+                      onTap: () => _onLevelSelect('N5'),
+                      onStartPressed: () => _navigateToTestDetail('all'),
                     ),
                     const SizedBox(width: 16),
                     JLPTLevelCard(
@@ -62,7 +83,8 @@ class _JLPTTestPageState extends State<JLPTTestPage> {
                       title: 'Cơ Bản',
                       progress: 0.40,
                       color: Colors.green,
-                      onTap: () {},
+                      onTap: () => _onLevelSelect('N4'),
+                      onStartPressed: () => _navigateToTestDetail('all'),
                     ),
                   ],
                 ),
@@ -80,21 +102,21 @@ class _JLPTTestPageState extends State<JLPTTestPage> {
                 icon: Icons.book,
                 title: 'Ngữ Pháp',
                 subtitle: '45 bài kiểm tra',
-                onTap: () {},
+                //onTap: () => _navigateToTestDetail('grammar'),
               ),
               const SizedBox(height: 12),
               TestSectionCard(
                 icon: Icons.library_books,
                 title: 'Từ Vựng',
                 subtitle: '60 bài kiểm tra',
-                onTap: () {},
+               // onTap: () => _navigateToTestDetail('vocabulary'),
               ),
               const SizedBox(height: 12),
               TestSectionCard(
                 icon: Icons.headphones,
                 title: 'Nghe Hiểu',
                 subtitle: '30 bài kiểm tra',
-                onTap: () {},
+                //onTap: () => _navigateToTestDetail('listening'),
               ),
               const SizedBox(height: 24),
               const Text(

@@ -1,48 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../widgets/profile_header.dart';
 import '../widgets/profile_quick_stat.dart';
 import '../widgets/profile_goal_progress.dart';
 import '../widgets/profile_badge.dart';
 import '../widgets/profile_action_button.dart';
-import '../../../auth/presentation/bloc/auth_bloc.dart';
-import '../../../auth/presentation/bloc/auth_event.dart';
-import '../../../../core/di/injection_container.dart' as di;
+import '../../../settings/presentation/pages/settings_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
-
-  void _handleLogout(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Đăng xuất'),
-          content: const Text('Bạn có chắc chắn muốn đăng xuất không?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Hủy'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                // Tạo AuthBloc và trigger logout event
-                final authBloc = di.sl<AuthBloc>();
-                authBloc.add(const LogoutEvent());
-                
-                // Navigate to login page và clear all previous routes
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/login',
-                  (route) => false,
-                );
-              },
-              child: const Text('Đăng xuất', style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +16,26 @@ class ProfilePage extends StatelessWidget {
       backgroundColor: const Color(0xFFF8F9FB),
       appBar: AppBar(
         backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            print('Back button pressed'); // Debug log
+            try {
+              if (Navigator.of(context).canPop()) {
+                print('Can pop, calling pop()'); // Debug log
+                Navigator.of(context).pop();
+              } else {
+                print('Cannot pop, navigating to home'); // Debug log
+                Navigator.of(context).pushReplacementNamed('/home');
+              }
+            } catch (e) {
+              print('Navigation error: $e'); // Debug log
+              // Fallback navigation
+              Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+            }
+          },
         ),
         actions: [
           IconButton(
@@ -129,12 +111,11 @@ class ProfilePage extends StatelessWidget {
               ProfileActionButton(icon: Icons.bar_chart_rounded, label: 'Đặt lại mục tiêu', onTap: () {}),
               ProfileActionButton(icon: Icons.access_time_rounded, label: 'Thay đổi cấp độ JLPT', onTap: () {}),
               ProfileActionButton(icon: Icons.shield_rounded, label: 'Cài đặt bảo mật', onTap: () {}),
-              ProfileActionButton(
-                icon: Icons.logout_rounded, 
-                label: 'Đăng xuất', 
-                onTap: () => _handleLogout(context), 
-                color: Colors.red
-              ),
+              ProfileActionButton(icon: Icons.settings, label: 'Cài đặt', onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const SettingsPage()),
+                );
+              }),
             ],
           ),
           const SizedBox(height: 24),

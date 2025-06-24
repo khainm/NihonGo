@@ -5,7 +5,8 @@ class JLPTLevelCard extends StatelessWidget {
   final String title;
   final double progress;
   final Color color;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
+  final VoidCallback? onStartPressed;
 
   const JLPTLevelCard({
     super.key,
@@ -13,20 +14,21 @@ class JLPTLevelCard extends StatelessWidget {
     required this.title,
     required this.progress,
     required this.color,
-    required this.onTap,
+    this.onTap,
+    this.onStartPressed,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
       child: Container(
-        width: 200,
+        width: 160,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: color.withOpacity(0.1),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withOpacity(0.3)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,11 +41,12 @@ class JLPTLevelCard extends StatelessWidget {
                 color: color,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 18,
+              style: TextStyle(
+                fontSize: 16,
+                color: color,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -52,6 +55,7 @@ class JLPTLevelCard extends StatelessWidget {
               value: progress,
               backgroundColor: color.withOpacity(0.2),
               valueColor: AlwaysStoppedAnimation<Color>(color),
+              borderRadius: BorderRadius.circular(4),
             ),
             const SizedBox(height: 8),
             Text(
@@ -62,26 +66,24 @@ class JLPTLevelCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: onStartPressed,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: color,
+                  elevation: 0,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                ],
-              ),
-              child: const Text(
-                'Bắt Đầu Học',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
+                ),
+                child: const Text(
+                  'Bắt Đầu Học',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
