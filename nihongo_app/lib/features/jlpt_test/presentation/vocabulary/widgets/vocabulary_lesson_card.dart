@@ -3,81 +3,78 @@ import '../models/vocabulary_lesson.dart';
 
 class VocabularyLessonCard extends StatelessWidget {
   final VocabularyLesson lesson;
-  final VoidCallback onStart;
+  final Color color;
+  final VoidCallback onTap;
 
   const VocabularyLessonCard({
     super.key,
     required this.lesson,
-    required this.onStart,
+    required this.color,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    final progress = lesson.completedWords / lesson.totalWords;
+
     return Card(
-      margin: const EdgeInsets.only(bottom: 16),
+      elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    lesson.title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: color.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      lesson.title,
+                      style: TextStyle(
+                        color: color,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                Icon(
-                  lesson.isCompleted
-                      ? Icons.check_circle
-                      : Icons.radio_button_unchecked,
-                  color: lesson.isCompleted ? Colors.green : Colors.grey,
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                const Icon(Icons.help_outline, size: 16, color: Colors.grey),
-                const SizedBox(width: 4),
-                Text(
-                  '${lesson.questionCount} từ vựng',
-                  style: const TextStyle(color: Colors.grey),
-                ),
-                const SizedBox(width: 16),
-                const Icon(Icons.timer_outlined, size: 16, color: Colors.grey),
-                const SizedBox(width: 4),
-                Text(
-                  '${lesson.duration} phút',
-                  style: const TextStyle(color: Colors.grey),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: onStart,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                  const Spacer(),
+                  Text(
+                    '${lesson.completedWords}/${lesson.totalWords}',
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-                child: Text(
-                  lesson.isCompleted ? 'Làm lại' : 'Bắt đầu',
+                ],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                lesson.description,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+              LinearProgressIndicator(
+                value: progress,
+                backgroundColor: Colors.grey[200],
+                valueColor: AlwaysStoppedAnimation<Color>(color),
+              ),
+            ],
+          ),
         ),
       ),
     );

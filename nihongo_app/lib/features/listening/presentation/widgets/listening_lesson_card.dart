@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import '../models/grammar_lesson.dart';
+import '../../domain/entities/listening_lesson.dart';
 
-class GrammarLessonCard extends StatelessWidget {
-  final GrammarLesson lesson;
+class ListeningLessonCard extends StatelessWidget {
+  final ListeningLesson lesson;
   final Color color;
   final VoidCallback onTap;
 
-  const GrammarLessonCard({
+  const ListeningLessonCard({
     super.key,
     required this.lesson,
     required this.color,
@@ -15,7 +15,7 @@ class GrammarLessonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final progress = lesson.completedPoints / lesson.totalPoints;
+    final progress = lesson.completedExercises / lesson.totalExercises;
 
     return Card(
       elevation: 2,
@@ -50,12 +50,18 @@ class GrammarLessonCard extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  Text(
-                    '${lesson.completedPoints}/${lesson.totalPoints}',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
+                  Row(
+                    children: [
+                      Icon(Icons.timer_outlined, size: 16, color: Colors.grey[600]),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${lesson.duration.inMinutes} phút',
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -68,10 +74,24 @@ class GrammarLessonCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              LinearProgressIndicator(
-                value: progress,
-                backgroundColor: Colors.grey[200],
-                valueColor: AlwaysStoppedAnimation<Color>(color),
+              Row(
+                children: [
+                  Expanded(
+                    child: LinearProgressIndicator(
+                      value: progress,
+                      backgroundColor: Colors.grey[200],
+                      valueColor: AlwaysStoppedAnimation<Color>(color),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    '${lesson.completedExercises}/${lesson.totalExercises}',
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

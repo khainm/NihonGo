@@ -1,17 +1,17 @@
-class VocabularyLesson {
+class KanjiLesson {
   final int id;
   final String title;
   final String description;
-  final int totalWords;
-  final int completedWords;
+  final int totalKanji;
+  final int completedKanji;
   final String level;
 
-  VocabularyLesson({
+  KanjiLesson({
     required this.id,
     required this.title,
     required this.description,
-    required this.totalWords,
-    required this.completedWords,
+    required this.totalKanji,
+    required this.completedKanji,
     required this.level,
   });
 } 

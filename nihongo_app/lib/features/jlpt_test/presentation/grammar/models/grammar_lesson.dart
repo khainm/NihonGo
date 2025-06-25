@@ -1,13 +1,17 @@
 class GrammarLesson {
+  final int id;
   final String title;
-  final int questionCount;
-  final int duration;
-  final bool isCompleted;
+  final String description;
+  final int totalPoints;
+  final int completedPoints;
+  final String level;
 
-  const GrammarLesson({
+  GrammarLesson({
+    required this.id,
     required this.title,
-    required this.questionCount,
-    required this.duration,
-    required this.isCompleted,
+    required this.description,
+    required this.totalPoints,
+    required this.completedPoints,
+    required this.level,
   });
 } 

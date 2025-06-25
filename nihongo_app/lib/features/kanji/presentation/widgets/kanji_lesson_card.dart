@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import '../models/grammar_lesson.dart';
+import '../../domain/entities/kanji_lesson.dart';
 
-class GrammarLessonCard extends StatelessWidget {
-  final GrammarLesson lesson;
+class KanjiLessonCard extends StatelessWidget {
+  final KanjiLesson lesson;
   final Color color;
   final VoidCallback onTap;
 
-  const GrammarLessonCard({
+  const KanjiLessonCard({
     super.key,
     required this.lesson,
     required this.color,
@@ -15,7 +15,7 @@ class GrammarLessonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final progress = lesson.completedPoints / lesson.totalPoints;
+    final progress = lesson.completedKanji / lesson.totalKanji;
 
     return Card(
       elevation: 2,
@@ -51,7 +51,7 @@ class GrammarLessonCard extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    '${lesson.completedPoints}/${lesson.totalPoints}',
+                    '${lesson.completedKanji}/${lesson.totalKanji}',
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontSize: 14,
