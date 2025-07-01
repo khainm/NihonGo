@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../features/home/presentation/pages/home_page.dart';
-import '../../features/jlpt_test/presentation/pages/jlpt_test_page.dart';
+import '../../features/jlpt_practice_test/presentation/pages/jlpt_test_page.dart';
 import '../../features/progress/presentation/pages/progress_page.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../../features/jlpt_test/presentation/vocabulary/pages/vocabulary_lessons_page.dart';
-import '../../../../features/jlpt_test/presentation/grammar/pages/grammar_lessons_page.dart';
-import '../../../../features/kanji/presentation/pages/kanji_lessons_page.dart';
-import '../../../../features/listening/presentation/pages/listening_lessons_page.dart';
+import '../../../../features/jlpt_practice_test/presentation/grammar_test/pages/grammar_lessons_page.dart';
+import '../../../../features/learning_lessons/kanji/presentation/pages/kanji_lessons_page.dart';
+import '../../../../features/learning_lessons/listening/presentation/pages/listening_lessons_page.dart';
+import '../../../../features/learning_lessons/vocabulary/presentation/pages/vocabulary_lessons_page.dart' as LearningVocabulary;
 
 class LevelDetailPage extends StatelessWidget {
   final String level;
@@ -124,7 +124,7 @@ class LevelDetailPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => VocabularyLessonsPage(
+                    builder: (context) => LearningVocabulary.VocabularyLessonsPage(
                       level: level,
                       subtitle: subtitle,
                       color: color,
