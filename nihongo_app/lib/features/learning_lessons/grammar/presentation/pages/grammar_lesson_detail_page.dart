@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/grammar_lesson.dart';
 import '../widgets/grammar_point_card.dart';
+import 'grammar_practice_page.dart';
 
 class GrammarLessonDetailPage extends StatefulWidget {
   final GrammarLesson lesson;
@@ -349,10 +350,13 @@ class _GrammarLessonDetailPageState extends State<GrammarLessonDetailPage> {
                   Expanded(
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        // TODO: Navigate to practice/quiz
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Tính năng luyện tập sẽ được thêm sau!'),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GrammarPracticePage(
+                              lesson: widget.lesson,
+                              color: widget.color,
+                            ),
                           ),
                         );
                       },

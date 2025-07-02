@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/vocabulary_lesson.dart';
 import '../widgets/vocabulary_word_card.dart';
+import 'vocabulary_practice_page.dart';
 
 class VocabularyLessonDetailPage extends StatefulWidget {
   final VocabularyLesson lesson;
@@ -304,10 +305,13 @@ class _VocabularyLessonDetailPageState extends State<VocabularyLessonDetailPage>
                   Expanded(
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        // TODO: Navigate to practice/quiz
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Tính năng luyện tập sẽ được thêm sau!'),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => VocabularyPracticePage(
+                              lesson: widget.lesson,
+                              color: widget.color,
+                            ),
                           ),
                         );
                       },

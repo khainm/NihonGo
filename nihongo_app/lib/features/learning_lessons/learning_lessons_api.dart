@@ -6,12 +6,18 @@ export 'vocabulary/data/datasources/vocabulary_lesson_remote_datasource.dart';
 export 'vocabulary/data/repositories/vocabulary_repository_impl.dart';
 export 'vocabulary/data/models/vocabulary_lesson_model.dart';
 export 'vocabulary/domain/usecases/get_vocabulary_lessons_with_user.dart';
+export 'vocabulary/presentation/pages/vocabulary_lessons_page.dart';
+export 'vocabulary/presentation/pages/vocabulary_lesson_detail_page.dart';
+export 'vocabulary/presentation/pages/vocabulary_practice_page.dart';
 
 // Grammar Lessons
 export 'grammar/data/datasources/grammar_lesson_remote_datasource.dart';
 export 'grammar/data/repositories/grammar_repository_impl.dart';
 export 'grammar/data/models/grammar_lesson_model.dart';
 export 'grammar/domain/usecases/get_grammar_lessons_with_user.dart';
+export 'grammar/presentation/pages/grammar_lessons_page.dart';
+export 'grammar/presentation/pages/grammar_lesson_detail_page.dart';
+export 'grammar/presentation/pages/grammar_practice_page.dart';
 
 // Kanji Lessons
 export 'kanji/data/datasources/kanji_lesson_remote_datasource.dart';
