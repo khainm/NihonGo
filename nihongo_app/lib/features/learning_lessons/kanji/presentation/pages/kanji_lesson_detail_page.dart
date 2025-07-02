@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/kanji_lesson.dart';
+import 'kanji_practice_page.dart';
 
 class KanjiCharacter {
   final String character;
@@ -322,6 +323,34 @@ class KanjiLessonDetailPage extends StatelessWidget {
               itemCount: kanjiCharacters.length,
               separatorBuilder: (context, index) => const SizedBox(height: 16),
               itemBuilder: (context, index) => _buildKanjiCard(kanjiCharacters[index]),
+            ),
+            const SizedBox(height: 32),
+            // Practice button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => KanjiPracticePage(
+                        lesson: lesson,
+                        color: color,
+                      ),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.fitness_center),
+                label: const Text('Bắt đầu luyện tập'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: color,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
             ),
           ],
         ),

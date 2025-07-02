@@ -17,13 +17,11 @@ class VocabularyLessonModel extends VocabularyLesson {
       id: json['id'],
       title: json['title'],
       description: json['description'],
-      totalWords: json['totalWords'],
-      completedWords: json['completedWords'],
-      level: json['level'],
-      estimatedTime: Duration(minutes: json['estimatedMinutes']),
-      words: (json['words'] as List)
-          .map((w) => VocabularyWordModel.fromJson(w))
-          .toList(),
+      totalWords: json['totalItems'] ?? 0,
+      completedWords: json['progress']?['completedItems'] ?? 0,
+      level: 'N${json['jlptLevel']}',
+      estimatedTime: Duration(minutes: json['estimatedTimeMinutes'] ?? 30),
+      words: [], // Will be loaded separately in detail view
     );
   }
 
@@ -57,11 +55,11 @@ class VocabularyWordModel extends VocabularyWord {
     return VocabularyWordModel(
       id: json['id'],
       word: json['word'],
-      reading: json['reading'],
+      reading: json['reading'] ?? '',
       meaning: json['meaning'],
-      example: json['example'],
-      exampleTranslation: json['exampleTranslation'],
-      tags: List<String>.from(json['tags']),
+      example: json['examples']?.isNotEmpty == true ? json['examples'][0]['japanese'] ?? '' : '',
+      exampleTranslation: json['examples']?.isNotEmpty == true ? json['examples'][0]['translation'] ?? '' : '',
+      tags: List<String>.from(json['tags'] ?? []),
       isLearned: json['isLearned'] ?? false,
     );
   }

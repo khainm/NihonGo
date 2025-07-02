@@ -28,6 +28,8 @@ class SecurityConfig(
             .csrf { it.disable() }
             .authorizeHttpRequests { auth ->
                 auth.requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/learning/**").permitAll()
+                    .requestMatchers("/actuator/health").permitAll()
                     .anyRequest().authenticated()
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }

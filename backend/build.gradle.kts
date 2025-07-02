@@ -25,7 +25,6 @@ dependencies {
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-security") // để dùng BCrypt
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -34,6 +33,14 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+	
+	// HTTP Client for external APIs
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+	
+	// Cache support
+	implementation("org.springframework.boot:spring-boot-starter-cache")
+	implementation("com.github.ben-manes.caffeine:caffeine")
 	
 	testImplementation("org.springframework.security:spring-security-test")
 }
