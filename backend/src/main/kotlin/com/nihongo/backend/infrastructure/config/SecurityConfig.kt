@@ -28,7 +28,8 @@ class SecurityConfig(
             .csrf { it.disable() }
             .authorizeHttpRequests { auth ->
                 auth.requestMatchers("/api/auth/**").permitAll()
-                    .requestMatchers("/api/learning/**").permitAll()
+                    .requestMatchers("/api/learning/jlpt-vocabulary/**").permitAll()
+                    .requestMatchers("/api/test/**").permitAll()
                     .requestMatchers("/actuator/health").permitAll()
                     .anyRequest().authenticated()
             }

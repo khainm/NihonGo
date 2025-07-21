@@ -9,7 +9,8 @@ import java.util.*
 
 @Service
 class JwtService {
-    private val secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256)
+    // Use a fixed secret key to ensure tokens persist across restarts
+    private val secretKey = Keys.hmacShaKeyFor("MySecretKeyForJWTTokenSigningThatIsVeryLongAndSecure1234567890".toByteArray())
     private val tokenValidity = 30L * 24 * 60 * 60 * 1000 // 30 days
 
     fun generateToken(email: String): String {
@@ -31,8 +32,12 @@ class JwtService {
 
     fun getEmailFromToken(token: String): String? {
         return try {
-            getClaimsFromToken(token).subject
+            val claims = getClaimsFromToken(token)
+            val email = claims.subject
+            println("DEBUG JwtService.getEmailFromToken: Successfully extracted email = $email")
+            email
         } catch (e: Exception) {
+            println("DEBUG JwtService.getEmailFromToken: Error parsing token: ${e.message}")
             null
         }
     }

@@ -1,7 +1,6 @@
 class ApiConstants {
   // Base URLs for different environments
   static const String _baseUrlLocal = 'http://10.0.2.2:8080'; // For Android Emulator
-  static const String _baseUrlLocalhost = 'http://localhost:8080'; // For Web/Desktop
   
   // Choose base URL based on platform
   static String get baseUrl {

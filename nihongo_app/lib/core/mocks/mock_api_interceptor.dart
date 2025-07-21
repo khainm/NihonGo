@@ -31,7 +31,7 @@ class MockApiInterceptor extends Interceptor {
       // Kiểm tra nếu email đã được đăng ký
       if (_users.containsKey(email)) {
         return handler.reject(
-          DioError(
+          DioException(
             requestOptions: options,
             response: Response(
               requestOptions: options,
@@ -76,7 +76,7 @@ class MockApiInterceptor extends Interceptor {
       );
     } catch (e) {
       return handler.reject(
-        DioError(
+        DioException(
           requestOptions: options,
           response: Response(
             requestOptions: options,
@@ -99,7 +99,7 @@ class MockApiInterceptor extends Interceptor {
       // Kiểm tra nếu email tồn tại
       if (!_users.containsKey(email)) {
         return handler.reject(
-          DioError(
+          DioException(
             requestOptions: options,
             response: Response(
               requestOptions: options,
@@ -115,7 +115,7 @@ class MockApiInterceptor extends Interceptor {
       // Kiểm tra mật khẩu
       if (_users[email]['password'] != password) {
         return handler.reject(
-          DioError(
+          DioException(
             requestOptions: options,
             response: Response(
               requestOptions: options,
@@ -144,7 +144,7 @@ class MockApiInterceptor extends Interceptor {
       );
     } catch (e) {
       return handler.reject(
-        DioError(
+        DioException(
           requestOptions: options,
           response: Response(
             requestOptions: options,

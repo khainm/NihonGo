@@ -91,12 +91,10 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
   
-  @override
   Future<void> logout() async {
     await AuthService.clearAuthData();
   }
   
-  @override
   Future<bool> isLoggedIn() async {
     return AuthService.isAuthenticated();
   }

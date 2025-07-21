@@ -39,14 +39,6 @@ class _TestDetailPageState extends State<TestDetailPage> {
     );
   }
 
-  void _onTestStart() {
-    // TODO: Implement test start logic
-  }
-
-  void _onTestContinue() {
-    // TODO: Implement test continue logic
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

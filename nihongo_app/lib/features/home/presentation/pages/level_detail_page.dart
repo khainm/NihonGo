@@ -3,7 +3,6 @@ import '../../../../features/jlpt_practice_test/presentation/grammar_test/pages/
 import '../../../../features/learning_lessons/grammar/presentation/pages/grammar_lessons_page.dart' as LearningGrammar;
 import '../../../../features/learning_lessons/kanji/presentation/pages/kanji_lessons_page.dart';
 import '../../../../features/learning_lessons/listening/presentation/pages/listening_lessons_page.dart';
-import '../../../../features/learning_lessons/vocabulary/presentation/pages/vocabulary_lessons_page.dart' as LearningVocabulary;
 
 class LevelDetailPage extends StatelessWidget {
   final String level;
@@ -122,16 +121,8 @@ class LevelDetailPage extends StatelessWidget {
               title: 'Từ vựng',
               icon: Icons.menu_book,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LearningVocabulary.VocabularyLessonsPage(
-                      level: level,
-                      subtitle: subtitle,
-                      color: color,
-                    ),
-                  ),
-                );
+                // Navigate to JLPT levels page for all levels
+                Navigator.pushNamed(context, '/jlpt-levels');
               },
             ),
             const SizedBox(height: 12),
