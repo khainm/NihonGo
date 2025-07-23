@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../vocabulary/domain/entities/jlpt_vocabulary.dart';
 import '../../../vocabulary/data/datasources/jlpt_vocabulary_data_repository.dart';
 import '../../../vocabulary/data/services/jlpt_vocabulary_api_service.dart';
+import '../../../vocabulary/data/services/jlpt_progress_service.dart';
 
 class JlptLessonsPage extends StatefulWidget {
   final String jlptLevel;
@@ -17,14 +18,38 @@ class JlptLessonsPage extends StatefulWidget {
 
 class _JlptLessonsPageState extends State<JlptLessonsPage> {
   final JlptVocabularyApiService _apiService = JlptVocabularyApiService();
+  final JlptProgressService _progressService = JlptProgressService();
   List<JlptVocabularyLesson> _lessons = [];
   bool _isLoading = true;
   bool _hasError = false;
+  
+  // User progress stats
+  int _totalLearnedWords = 0;
+  int _completedLessons = 0;
+  int _totalWords = 0;
 
   @override
   void initState() {
     super.initState();
     _loadLessons();
+    _loadUserStats();
+  }
+
+  Future<void> _loadUserStats() async {
+    try {
+      final stats = await _progressService.getUserStats(jlptLevel: widget.jlptLevel);
+      if (stats != null && stats['success'] == true) {
+        final data = stats['data'];
+        setState(() {
+          _totalLearnedWords = data['completedWords'] ?? 0;
+          _completedLessons = data['completedLessons'] ?? 0;
+          _totalWords = data['totalWords'] ?? 0;
+        });
+      }
+    } catch (e) {
+      print('Error loading user stats: $e');
+      // Keep default values (0) if API fails
+    }
   }
 
   Future<void> _loadLessons() async {
@@ -72,6 +97,13 @@ class _JlptLessonsPageState extends State<JlptLessonsPage> {
     }
   }
 
+  Future<void> _refreshData() async {
+    await Future.wait([
+      _loadLessons(),
+      _loadUserStats(),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final color = _getLevelColor(widget.jlptLevel);
@@ -109,9 +141,12 @@ class _JlptLessonsPageState extends State<JlptLessonsPage> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
+          : RefreshIndicator(
+              onRefresh: _refreshData,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Error banner
@@ -139,7 +174,7 @@ class _JlptLessonsPageState extends State<JlptLessonsPage> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.refresh),
-                            onPressed: _loadLessons,
+                            onPressed: _refreshData,
                             iconSize: 20,
                           ),
                         ],
@@ -207,7 +242,7 @@ class _JlptLessonsPageState extends State<JlptLessonsPage> {
                             child: Column(
                               children: [
                                 Text(
-                                  '${_lessons.where((l) => l.isCompleted).length}',
+                                  '$_completedLessons',
                                   style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
@@ -233,7 +268,7 @@ class _JlptLessonsPageState extends State<JlptLessonsPage> {
                             child: Column(
                               children: [
                                 Text(
-                                  '${_lessons.fold(0, (sum, l) => sum + l.completedWords)}',
+                                  '$_totalLearnedWords',
                                   style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
@@ -259,7 +294,7 @@ class _JlptLessonsPageState extends State<JlptLessonsPage> {
                             child: Column(
                               children: [
                                 Text(
-                                  '${_lessons.fold(0, (sum, l) => sum + l.totalWords)}',
+                                  '$_totalWords',
                                   style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
@@ -327,11 +362,14 @@ class _JlptLessonsPageState extends State<JlptLessonsPage> {
                         return _buildLessonCard(context, lesson, color);
                       },
                     ),
-                ],
+                  ],
+                ),
               ),
             ),
     );
-  }  Widget _buildLessonCard(BuildContext context, JlptVocabularyLesson lesson, Color color) {
+  }
+
+  Widget _buildLessonCard(BuildContext context, JlptVocabularyLesson lesson, Color color) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,

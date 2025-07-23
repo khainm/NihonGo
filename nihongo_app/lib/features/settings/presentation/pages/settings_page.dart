@@ -120,6 +120,21 @@ class _SettingsPageState extends State<SettingsPage> {
           LogoutCard(
             onTap: () => _handleLogout(context),
           ),
+          const SizedBox(height: 12),
+          // Debug card for token testing
+          Card(
+            margin: EdgeInsets.zero,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: ListTile(
+              leading: const Icon(Icons.bug_report, color: Colors.orange),
+              title: const Text('Token Test (Debug)'),
+              subtitle: const Text('Test authentication token'),
+              trailing: const Icon(Icons.arrow_forward_ios),
+              onTap: () {
+                Navigator.pushNamed(context, '/token-test');
+              },
+            ),
+          ),
           const SizedBox(height: 24),
           Center(
             child: Text('Phiên bản 1.0.0', style: TextStyle(color: Colors.grey[500], fontSize: 13)),

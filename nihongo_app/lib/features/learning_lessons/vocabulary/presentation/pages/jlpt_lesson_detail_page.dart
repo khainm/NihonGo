@@ -92,6 +92,23 @@ class _JlptLessonDetailPageState extends State<JlptLessonDetailPage> {
         isLearned: true,
       );
       print('✅ Progress saved successfully for word: $wordId');
+      
+      // Show success feedback
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Row(
+              children: [
+                Icon(Icons.check_circle, color: Colors.white),
+                SizedBox(width: 8),
+                Text('Đã lưu tiến độ học!'),
+              ],
+            ),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
     } catch (e) {
       print('❌ Error saving progress for word $wordId: $e');
       // Show snackbar to inform user

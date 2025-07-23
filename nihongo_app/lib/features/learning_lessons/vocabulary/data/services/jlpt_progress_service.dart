@@ -83,6 +83,7 @@ class JlptProgressService {
         Uri.parse('$baseUrl$progressPath/progress'),
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
         },
         body: jsonEncode(requestBody),
       );

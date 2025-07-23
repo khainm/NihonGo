@@ -10,6 +10,7 @@ import 'features/learning_lessons/vocabulary/presentation/pages/jlpt_vocabulary_
 import 'features/learning_lessons/vocabulary/presentation/pages/jlpt_vocabulary_flashcard_page.dart';
 import 'features/learning_lessons/vocabulary/presentation/pages/jlpt_vocabulary_quiz_page.dart';
 import 'features/learning_lessons/vocabulary/presentation/pages/vocabulary_debug_page.dart';
+import 'features/learning_lessons/vocabulary/presentation/pages/token_test_page.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/theme/app_theme.dart';
 import 'core/constants/app_constants.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterPage(),
         '/login': (context) => const LoginPage(),
         '/jlpt-levels': (context) => const JlptLevelsPage(),
+        '/token-test': (context) => const TokenTestPage(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == '/jlpt-lessons') {
